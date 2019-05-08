@@ -23,17 +23,30 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @PostMapping(path="/new",
-            headers = {
-                    "content-type=application/json" }, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addProject(@RequestBody Project project) {
+    @PostMapping(path="/new")
+    public Project addProject(@RequestBody Project project) {
         projectRepository.save(project);
-        return "added " + project.getName();
+        return project;
     }
 
     @GetMapping(path="/all")
     public List<Project> getAllProjects() {
         return (List) projectRepository.findAll();
+    }
+
+    @ResponseBody
+    @GetMapping(path="/{id}")
+    public Project getProjectById(@PathVariable(value="id") int id) {
+        return projectRepository.findById(id).orElse(null);
+    }
+
+    @PostMapping(path="/add")
+    public List<Employee> addEmployeeToProject(int project_id, Employee employee) {
+        Project project = projectRepository.findById(project_id).orElse(null);
+        if (project == null || employee == null) return null;
+        project.addTeamMember(employee);
+        projectRepository.save(project);
+        return project.getTeamMembers();
     }
 
 }

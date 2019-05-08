@@ -17,7 +17,7 @@ public class Project {
     @Column(name="id")
     int id;
     @NotBlank
-            @Column(name="name")
+    @Column(name="name")
     String name;
     @NotNull
     @Column(name="start_date")
